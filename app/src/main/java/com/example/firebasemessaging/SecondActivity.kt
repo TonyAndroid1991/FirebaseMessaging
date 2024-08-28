@@ -15,9 +15,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.firebasemessaging.ui.theme.FireBaseMessagingTheme
 
 class SecondActivity : ComponentActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val data = intent.getStringExtra("key1")
+        Toast.makeText(this, "Datos recibidos: $data", Toast.LENGTH_SHORT).show()
         setContent {
             SecondActivityText()
             Toast.makeText(this, "Second Activity", Toast.LENGTH_SHORT).show()

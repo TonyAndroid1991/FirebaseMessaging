@@ -1,8 +1,9 @@
 package com.example.firebasemessaging
 
+import android.app.NotificationManager
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -15,27 +16,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-//        // Verifica si el mensaje contiene datos
-//        remoteMessage.data.isNotEmpty().let {
-//            Toast.makeText(this, "Contiene datos ", Toast.LENGTH_SHORT).show()
-//
-//        }
-//
-//        // Verifica si el mensaje contiene una notificación
-//        remoteMessage.notification?.let {
-//            Toast.makeText(this, "Contiene una notificacion", Toast.LENGTH_SHORT).show()
-//
-//        }
+        Log.d("TAGGED", "onMessageReceived: message received")
+        showNotification(remoteMessage)
+    }
 
-        Log.i("TAGGED", "onMessageReceived called ")
-
-        val intent = Intent(applicationContext, SecondActivity::class.java).apply {
-            action = Intent.ACTION_VIEW
-        }
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        startActivity(intent)
-
+    private fun showNotification(remoteMessage: RemoteMessage) {
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        val notification = NotificationCompat.Builder(this, MyApplication.CHANNEL_ID)
+            .setContentTitle(remoteMessage.notification?.title)
+            .setContentText(remoteMessage.notification?.body)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .build()
+        notificationManager.notify(1, notification)
     }
 
 }
